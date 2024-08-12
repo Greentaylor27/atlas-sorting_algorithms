@@ -8,51 +8,38 @@
 
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *curr = (*list)->next;
-	listint_t *previous;
+	listint_t *curr, *previous, *temp;
 
-	if (curr == NULL || curr->next == NULL)
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
 	{
 		printf("Invalid list\n");
 		return;
 	}
 
-	else
-	{
-		printf("The list was valid.\n");
-		printf("The list is: %d", curr->next->n);
-		while (curr != NULL && curr->next != NULL)
+	curr = (*list)->next;
+	while (curr != NULL)
 		{
+			temp = curr->next;
 			previous = curr->prev;
-			while (previous !=NULL && previous->n > curr->n)
+			while (previous != NULL && previous->n > curr->n)
 			{
-				if (previous == NULL)
+				if (temp == NULL)
 				{
-					*list = curr;
+					curr->next = NULL;
+					curr->prev = previous;
+				}
+				if (curr == *list)
+				{
+					temp = *list;
+					previous = NULL;
 				}
 				else
 				{
-					printf("We are comparing %d and %d\n", curr->n, previous->n);
-					previous->next = curr->next;
-					if (curr->next != NULL)
-					{
-						curr->next->prev = previous;
-					}
-				curr->prev = previous->prev;
-				curr->next = previous;
-				if (previous->prev != NULL)
-				{
-					previous->prev->next = curr;
+					temp = curr->prev;
+					previous = curr->next;
 				}
-				else
-				{
-					*list = curr;
-				}
-				previous->prev = curr;
 			}
-			curr = curr->next;
-			}
+			curr = temp;
+			print_list(*list);
 		}
-		print_list(*list);
-	}
 }
