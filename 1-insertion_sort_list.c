@@ -8,50 +8,36 @@
 
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *curr, *index, *nNode;
+	listint_t *curr = *list;
+	listint_t *cmpNode;
 
 	if (!list || !*list || !(*list)->prev)
 	{
 		return;
 	}
-
-	curr = (*list)->next;
-	while (!curr)
+	
+	printf("Starting to iterate over list");
+	for (; curr != NULL && curr->next != NULL; curr = curr->next)
 	{
-		nNode = curr->next;
-		index = curr->prev;
-		if (curr->next != NULL)
+		printf("We are currently in the list");
+		cmpNode = curr->next;
+		if (cmpNode->n > curr->n)
 		{
-			curr->next->prev = curr->prev;
-		}
-		if (curr->prev != NULL)
-		{
-			curr->prev->next = curr->next;
-		}
-		curr->prev = NULL;
-		curr->next = NULL;
-		while (index != NULL && index->n > curr->n)
-		{
-			index = index->prev;
-		}
-		if (index == NULL)
-		{
-			curr->next = *list;
-			curr->prev = NULL;
-			(*list)->prev = curr;
-			*list = curr;
-		}
-		else
-		{
-			curr->next = index->next;
-			curr->prev = index;
-			if (index->next != NULL)
+			printf("We are comparing nodes now");
+			cmpNode->prev = curr->prev;
+			cmpNode->next = curr;
+			if (cmpNode->prev != NULL)
 			{
-				index->next->prev = curr;
+				cmpNode->prev->next = cmpNode;
 			}
-			index ->next = curr;
+			else
+			{
+				*list = cmpNode;
+			}
+			curr->prev = cmpNode;
+			print_list(curr);
 		}
-		print_list(curr);
-		curr = nNode;
+		curr = curr->next;
 	}
+	printf("We are finished");
 }
