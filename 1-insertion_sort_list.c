@@ -8,36 +8,51 @@
 
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *curr = *list;
-	listint_t *cmpNode;
+	listint_t *curr = (*list)->next;
+	listint_t *previous;
 
-	if (!list || !*list || !(*list)->prev)
+	if (curr == NULL || curr->next == NULL)
 	{
+		printf("Invalid list\n");
 		return;
 	}
-	
-	printf("Starting to iterate over list");
-	for (; curr != NULL && curr->next != NULL; curr = curr->next)
+
+	else
 	{
-		printf("We are currently in the list");
-		cmpNode = curr->next;
-		if (cmpNode->n > curr->n)
+		printf("The list was valid.\n");
+		printf("The list is: %d", curr->next->n);
+		while (curr != NULL && curr->next != NULL)
 		{
-			printf("We are comparing nodes now");
-			cmpNode->prev = curr->prev;
-			cmpNode->next = curr;
-			if (cmpNode->prev != NULL)
+			previous = curr->prev;
+			while (previous !=NULL && previous->n > curr->n)
 			{
-				cmpNode->prev->next = cmpNode;
+				if (previous == NULL)
+				{
+					*list = curr;
+				}
+				else
+				{
+					printf("We are comparing %d and %d\n", curr->n, previous->n);
+					previous->next = curr->next;
+					if (curr->next != NULL)
+					{
+						curr->next->prev = previous;
+					}
+				curr->prev = previous->prev;
+				curr->next = previous;
+				if (previous->prev != NULL)
+				{
+					previous->prev->next = curr;
+				}
+				else
+				{
+					*list = curr;
+				}
+				previous->prev = curr;
 			}
-			else
-			{
-				*list = cmpNode;
+			curr = curr->next;
 			}
-			curr->prev = cmpNode;
-			print_list(curr);
 		}
-		curr = curr->next;
+		print_list(*list);
 	}
-	printf("We are finished");
 }
